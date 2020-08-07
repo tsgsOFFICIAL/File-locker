@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Threading;
 
 namespace Lock_files
     {
@@ -57,6 +56,7 @@ namespace Lock_files
                         break;
                     }
                 }
+
             stopwatch.Stop();
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("\nDone\n{0} directories found in just {1} seconds!", Directories.Count, stopwatch.Elapsed.TotalSeconds);
