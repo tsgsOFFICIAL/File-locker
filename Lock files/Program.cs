@@ -20,9 +20,12 @@ namespace Lock_files
             {
             Console.Title = "File locker v.1.0";
             Console.ForegroundColor = ConsoleColor.White;
+            System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+
             //Check if we recieved any arguments
             if (args.Length != 0)
                 {
+                stopwatch.Start();
                 getSubdirectories(args[0]);
                 }
             else
@@ -31,23 +34,27 @@ namespace Lock_files
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("If you choose NOT to specify, it is searching ALL drives and ALL directories, this will eat a lot of ram at once!");
                 Console.ForegroundColor = ConsoleColor.White;
-                switch (Console.ReadKey(true).KeyChar)
+                switch (Console.ReadKey(true).KeyChar.ToString().ToUpper())
                     {
-                    case 'N':
+                    case "N":
                         string[] drives = Directory.GetLogicalDrives();
                         foreach (string drive in drives)
                             {
+                            stopwatch.Start();
                             getSubdirectories(drive);
                             }
                         break;
                     default:
                         Console.Write("\nEnter a path to find subdirectories: ");
-                        getSubdirectories(Console.ReadLine());
+                        string _dir = Console.ReadLine();
+                        stopwatch.Start();
+                        getSubdirectories(_dir);
                         break;
                     }
                 }
+            stopwatch.Stop();
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("\nDone\n{0} directories found!", Directories.Count);
+            Console.WriteLine("\nDone\n{0} directories found in just {1} seconds!", Directories.Count, stopwatch.Elapsed.TotalSeconds);
             Pause(true);
             }
 
