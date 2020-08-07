@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace Lock_files
     {
@@ -32,7 +29,7 @@ namespace Lock_files
                 {
                 Console.WriteLine("No command line arguments were found, do you want to specify a directory to search in? (Y/N)");
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("If you choose NOT to specify, it is searching ALL drives and ALL directories, this will eat a lot of ram at once!");
+                Console.WriteLine("If you choose NOT to specify, it is searching ALL drives and ALL directories, this will eat a lot of ram at once!\n");
                 Console.ForegroundColor = ConsoleColor.White;
                 switch (Console.ReadKey(true).KeyChar.ToString().ToUpper())
                     {
@@ -55,6 +52,25 @@ namespace Lock_files
             stopwatch.Stop();
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("\nDone\n{0} directories found in just {1} seconds!", Directories.Count, stopwatch.Elapsed.TotalSeconds);
+            Console.Write("\nDo you wish to find");
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.Write(" EVERY ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("file within the {0} directories?", Directories.Count);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Warning, this could take a moment!");
+            Console.ForegroundColor = ConsoleColor.White;
+
+            switch (Console.ReadKey(true).KeyChar.ToString().ToUpper())
+                {
+                case "Y":
+                    stopwatch.Restart();
+
+                    break;
+                default:
+                    Environment.Exit(0);
+                    break;
+                }
             Pause(true);
             }
 
