@@ -86,6 +86,7 @@ namespace Lock_files
             switch (Console.ReadKey(true).Key.ToString().ToUpper())
                 {
                 case "Y":
+                    stopwatch.Restart();
                     Console.ForegroundColor = ConsoleColor.DarkRed;
                     for (int i = 0; i < Files.Count; i++)
                         {
@@ -127,7 +128,7 @@ namespace Lock_files
             }
 
         /// <summary>
-        /// 
+        /// Find all files within a specific directory
         /// </summary>
         /// <param name="dir"></param>
         static void FindAllFilesWithin(string dir)
@@ -160,10 +161,18 @@ namespace Lock_files
                 { }
             }
 
+        /// <summary>
+        /// Accepting the same argument as Console.ReadKey(bool intercept);
+        /// </summary>
+        /// <param name="intercept"></param>
         static void Pause(bool intercept)
             {
             Console.ReadKey(intercept);
             }
+
+        /// <summary>
+        /// I'm too lazy to do Console.ReadKey(); so this is shorter...
+        /// </summary>
         static void Pause()
             {
             Console.ReadKey();
