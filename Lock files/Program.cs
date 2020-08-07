@@ -56,7 +56,7 @@ namespace Lock_files
             Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.Write(" EVERY ");
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("file within the {0} directories?", Directories.Count);
+            Console.WriteLine("file within the {0} directories? (Y/N)", Directories.Count);
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Warning, this could take a moment!");
             Console.ForegroundColor = ConsoleColor.White;
@@ -65,12 +65,21 @@ namespace Lock_files
                 {
                 case "Y":
                     stopwatch.Restart();
-
+                    for (int i = 0; i < Directories.Count; i++)
+                        {
+                        FindAllFilesWithin(Directories[i]);
+                        }
                     break;
                 default:
                     Environment.Exit(0);
                     break;
                 }
+
+            stopwatch.Stop();
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("\nDone\n{0} files found in in just {1} seconds!", Files.Count, stopwatch.Elapsed.TotalSeconds);
+
             Pause(true);
             }
 
@@ -94,6 +103,24 @@ namespace Lock_files
             catch (Exception) { }
             }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dir"></param>
+        static void FindAllFilesWithin(string dir)
+            {
+            try
+                {
+                string[] files = Directory.GetFiles(dir, "*.*");
+                foreach (string file in files)
+                    {
+                    Files.Add(file);
+                    Console.WriteLine(file);
+                    }
+                }
+            catch (Exception)
+                { }
+            }
         static void Pause(bool intercept)
             {
             Console.ReadKey(intercept);
