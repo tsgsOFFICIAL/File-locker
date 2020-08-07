@@ -18,6 +18,8 @@ namespace Lock_files
         /// <param name="args">Console arguments</param>
         static void Main(string[] args)
             {
+            Console.Title = "File locker v.1.0";
+            Console.ForegroundColor = ConsoleColor.White;
             //Check if we recieved any arguments
             if (args.Length != 0)
                 {
@@ -25,8 +27,24 @@ namespace Lock_files
                 }
             else
                 {
-                Console.Write("Enter a path to find subdirectories: ");
-                getSubdirectories(Console.ReadLine());
+                Console.WriteLine("No command line arguments were found, do you want to specify a directory to search in? (Y/N)");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("If you choose NOT to specify, it is searching ALL drives and ALL directories, this will eat a lot of ram at once!");
+                Console.ForegroundColor = ConsoleColor.White;
+                switch (Console.ReadKey(true).KeyChar)
+                    {
+                    case 'N':
+                        string[] drives = Directory.GetLogicalDrives();
+                        foreach (string drive in drives)
+                            {
+                            getSubdirectories(drive);
+                            }
+                        break;
+                    default:
+                        Console.Write("\nEnter a path to find subdirectories: ");
+                        getSubdirectories(Console.ReadLine());
+                        break;
+                    }
                 }
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("\nDone\n{0} directories found!", Directories.Count);
