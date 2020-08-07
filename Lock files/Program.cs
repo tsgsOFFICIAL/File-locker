@@ -80,6 +80,25 @@ namespace Lock_files
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("\nDone\n{0} files found in in just {1} seconds!", Files.Count, stopwatch.Elapsed.TotalSeconds);
 
+            Console.WriteLine("Do you wish to lock all the files? (Y/N)");
+
+            switch (Console.ReadKey(true).Key.ToString().ToUpper())
+                {
+                case "Y":
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    for (int i = 0; i < Files.Count; i++)
+                        {
+                        LockFile(Files[i]);
+                        Console.WriteLine(Files[i] + " is now locked >:D");
+                        }
+                    break;
+                default:
+                    Environment.Exit(0);
+                    break;
+                }
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Press any key to unlock it all");
             Pause(true);
             }
 
@@ -121,6 +140,21 @@ namespace Lock_files
             catch (Exception)
                 { }
             }
+
+        /// <summary>
+        /// Lock the file
+        /// </summary>
+        /// <param name="file"></param>
+        static void LockFile(string file)
+            {
+            try
+                {
+                FileStream fs = new FileStream(file, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+                }
+            catch (Exception)
+                { }
+            }
+
         static void Pause(bool intercept)
             {
             Console.ReadKey(intercept);
