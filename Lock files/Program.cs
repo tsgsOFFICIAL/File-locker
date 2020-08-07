@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Lock_files
     {
@@ -9,6 +10,7 @@ namespace Lock_files
         static List<string> Directories = new List<string>();
         static List<string> Files = new List<string>();
         static int LockedFiles = 0;
+        static List<FileStream> locks = new List<FileStream>();
 
         /// <summary>
         /// Main method, the starting point of our application
@@ -32,7 +34,7 @@ namespace Lock_files
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("If you choose NOT to specify, it is searching ALL drives and ALL directories, this will eat a lot of ram at once!\n");
                 Console.ForegroundColor = ConsoleColor.White;
-                switch (Console.ReadKey(true).KeyChar.ToString().ToUpper())
+                switch (Console.ReadKey().KeyChar.ToString().ToUpper())
                     {
                     case "N":
                         string[] drives = Directory.GetLogicalDrives();
@@ -44,7 +46,7 @@ namespace Lock_files
                         break;
                     default:
                         Console.Write("\nEnter a path to find subdirectories: ");
-                        string _dir = Console.ReadLine();
+                        string _dir = Console.ReadLine().Trim('"');
                         stopwatch.Start();
                         FindAllFilesWithin(_dir);
                         foreach (string file in Files)
@@ -67,7 +69,7 @@ namespace Lock_files
             Console.WriteLine("Warning, this could take a moment!");
             Console.ForegroundColor = ConsoleColor.White;
 
-            switch (Console.ReadKey(true).KeyChar.ToString().ToUpper())
+            switch (Console.ReadKey().KeyChar.ToString().ToUpper())
                 {
                 case "Y":
                     stopwatch.Restart();
@@ -88,15 +90,13 @@ namespace Lock_files
 
             Console.WriteLine("Do you wish to lock all the files? (Y/N)");
 
-            switch (Console.ReadKey(true).Key.ToString().ToUpper())
+            switch (Console.ReadKey().Key.ToString().ToUpper())
                 {
                 case "Y":
                     stopwatch.Restart();
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
                     for (int i = 0; i < Files.Count; i++)
                         {
                         LockFile(Files[i]);
-                        Console.WriteLine(Files[i] + " is now locked >:D");
                         }
                     break;
                 default:
@@ -124,7 +124,6 @@ namespace Lock_files
 
                 foreach (string directory in directories)
                     {
-                    Console.WriteLine(directory);
                     Directories.Add(directory);
                     getSubdirectories(directory);
                     }
@@ -144,7 +143,6 @@ namespace Lock_files
                 foreach (string file in files)
                     {
                     Files.Add(file);
-                    Console.WriteLine(file);
                     }
                 }
             catch (Exception)
@@ -160,6 +158,9 @@ namespace Lock_files
             try
                 {
                 FileStream fs = new FileStream(file, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+                fs.Lock(0, 0);
+                locks.Add(fs);
+                Console.WriteLine(file + " is now locked");
                 LockedFiles++;
                 }
             catch (Exception)
