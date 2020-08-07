@@ -8,6 +8,7 @@ namespace Lock_files
         {
         static List<string> Directories = new List<string>();
         static List<string> Files = new List<string>();
+        static int LockedFiles = 0;
 
         /// <summary>
         /// Main method, the starting point of our application
@@ -97,7 +98,10 @@ namespace Lock_files
                     break;
                 }
 
+            stopwatch.Stop();
+
             Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("\nDone\n{0} files locked in in just {1} seconds!", LockedFiles, stopwatch.Elapsed.TotalSeconds);
             Console.WriteLine("Press any key to unlock it all");
             Pause(true);
             }
@@ -150,6 +154,7 @@ namespace Lock_files
             try
                 {
                 FileStream fs = new FileStream(file, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+                LockedFiles++;
                 }
             catch (Exception)
                 { }
