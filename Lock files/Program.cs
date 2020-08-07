@@ -46,6 +46,11 @@ namespace Lock_files
                         Console.Write("\nEnter a path to find subdirectories: ");
                         string _dir = Console.ReadLine();
                         stopwatch.Start();
+                        FindAllFilesWithin(_dir);
+                        foreach (string file in Files)
+                            {
+                            LockFile(file);
+                            }
                         getSubdirectories(_dir);
                         break;
                     }
