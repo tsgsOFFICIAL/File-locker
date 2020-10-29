@@ -36,8 +36,7 @@ namespace Lock_files
                 switch (Console.ReadKey().KeyChar.ToString().ToUpper())
                     {
                     case "N":
-                        string[] drives = Directory.GetLogicalDrives();
-                        foreach (string drive in drives)
+                        foreach (string drive in Directory.GetLogicalDrives())
                             {
                             stopwatch.Start();
                             getSubdirectories(drive);
@@ -136,9 +135,9 @@ namespace Lock_files
         /// </summary>
         /// <param name="dir"></param>
         static void FindAllFilesWithin(string dir)
-            {
+        {
             try
-                {
+            {
                 string[] files = Directory.GetFiles(dir, "*.*");
                 foreach (string file in files)
                     {
@@ -155,6 +154,7 @@ namespace Lock_files
         /// <param name="file"></param>
         static void LockFile(string file)
             {
+            Console.ForegroundColor = ConsoleColor.Green;
             try
                 {
                 FileStream fs = new FileStream(file, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
@@ -163,8 +163,11 @@ namespace Lock_files
                 Console.WriteLine(file + " is now locked");
                 LockedFiles++;
                 }
-            catch (Exception)
-                { }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(file + " is not locked -> " + ex.Message);
+            }
             }
 
         /// <summary>
